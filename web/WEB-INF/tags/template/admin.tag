@@ -3,7 +3,6 @@
 <%@taglib  tagdir="/WEB-INF/tags/bootstrap/" prefix="b" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="core" %>
 <%@taglib tagdir="/WEB-INF/tags/ui/" prefix="ui" %>
-<%@taglib tagdir="/WEB-INF/tags/language/" prefix="language" %>
 <%@taglib tagdir="/WEB-INF/tags/template/" prefix="template" %>
 <c:if test="${sessionScope.user.role.name() ne 'ADMIN'}">
     <c:redirect url="logout.html"></c:redirect>
@@ -19,36 +18,36 @@
             <!-- /.search form -->
             <!-- sidebar menu: : style can be found in sidebar.less -->
             <ul class="sidebar-menu">
-                <li class="${requestScope['javax.servlet.forward.servlet_path'] eq '/inf.saa'? 'active':''}">
-                    <a href="inf.saa">
-                        <i class="fa fa-info"></i> <span><language:language message="entrepise"></language:language></span>
-                        </a>
-                    </li>
-                    <li class="${requestScope['javax.servlet.forward.servlet_path'] eq '/manager.saa'? 'active':''}">
-                    <a href="manager.saa">
-                        <i class="fa fa-users"></i> <span><language:language message="managers"></language:language></span>
-                        </a>
-                    </li>
-                    <li class="${requestScope['javax.servlet.forward.servlet_path'] eq '/tax.saa'? 'active':''}">
-                    <a href="tax.saa">
-                        <i class="fa fa-try"></i> <span><language:language message="tax"></language:language></span>
-                        </a>
-                    </li>
-                    <li class="${requestScope['javax.servlet.forward.servlet_path'] eq '/mode.saa'? 'active':''}">
-                    <a href="mode.saa">
-                        <i class="fa fa-money"></i> <span><language:language message="mode"></language:language></span>
-                        </a>
-                    </li>
-                    <li class="${requestScope['javax.servlet.forward.servlet_path'] eq '/config.saa'? 'active':''}">
-                    <a href="config.saa">
-                        <i class="fa fa-cogs"></i> <span><language:language message="config"></language:language></span>
-                        </a>
-                    </li>
-                    <li class="${requestScope['javax.servlet.forward.servlet_path'] eq '/ticket.saa'? 'active':''}">
-                    <a href="ticket.saa">
-                        <i class="fa fa-ticket"></i> <span><language:language message="messages"></language:language></span>
-                        </a>
-                    </li>
+                 <li class="${requestScope['javax.servlet.forward.servlet_path'] eq '/r1.saa'? 'active':''}">
+                    <a href="r1.saa">
+                        <i class="fa fa-info"></i> <span>Requete 1</span>
+                    </a>
+                </li>
+                <li class="${requestScope['javax.servlet.forward.servlet_path'] eq '/r2.saa'? 'active':''}">
+                    <a href="r2.saa">
+                        <i class="fa fa-info"></i> <span>Requete 2</span>
+                    </a>
+                </li>
+                    <li class="${requestScope['javax.servlet.forward.servlet_path'] eq '/r3.saa'? 'active':''}">
+                    <a href="r3.saa">
+                        <i class="fa fa-info"></i> <span>Requete 3</span>
+                    </a>
+                </li>
+                    <li class="${requestScope['javax.servlet.forward.servlet_path'] eq '/r4.saa'? 'active':''}">
+                    <a href="r4.saa">
+                        <i class="fa fa-info"></i> <span>Requete 4</span>
+                    </a>
+                </li>
+                   <li class="${requestScope['javax.servlet.forward.servlet_path'] eq '/r5.saa'? 'active':''}">
+                    <a href="r5.saa">
+                        <i class="fa fa-info"></i> <span>Requete 5</span>
+                    </a>
+                </li>
+                   <li class="${requestScope['javax.servlet.forward.servlet_path'] eq '/r6.saa'? 'active':''}">
+                    <a href="r6.saa">
+                        <i class="fa fa-info"></i> <span>Requete 6</span>
+                    </a>
+                </li>
                 </ul>
             </section>
             <!-- /.sidebar -->

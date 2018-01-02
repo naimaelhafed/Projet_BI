@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-@javax.servlet.annotation.WebFilter(urlPatterns = {"*.html","*.saa","*.sma","*.sca"})
+@javax.servlet.annotation.WebFilter(urlPatterns = {"*.html","*.saa"})
 public class WebFilter implements Filter {
 
     private FilterConfig filterConfig = null;
@@ -28,26 +28,12 @@ public class WebFilter implements Filter {
         HttpSession session = servletRequest.getSession();
         WebUser user = (WebUser) session.getAttribute("user");
         if (user != null) {
-            if (url.contains(".sma")) {
-                if (user.getRole() == WebRole.MANAGER) {
-                    chain.doFilter(request, response);
-                } else {
-                    request.getRequestDispatcher("login.html").forward(request, response);
-                }
-            } else if (url.contains(".saa")) {
+            if (url.contains(".saa")) {
                 if (user.getRole() == WebRole.ADMIN) {
                     chain.doFilter(request, response);
                 } else {
                     request.getRequestDispatcher("login.html").forward(request, response);
                 }
-            } else if (url.contains(".sca")) {
-                if (user.getRole() == WebRole.CLIENT) {
-                    chain.doFilter(request, response);
-                } else {
-                    request.getRequestDispatcher("login.html").forward(request, response);
-                }
-            } else {
-                request.getRequestDispatcher("login.html").forward(request, response);
             }
         } else {
             if (url.contains(".html") || url.equals("/")) {

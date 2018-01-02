@@ -1,6 +1,6 @@
 package com.web.entity;
 
-import com.web.IValidation;
+
 import java.io.Serializable;
 import javax.persistence.Cacheable;
 import javax.persistence.Entity;
@@ -22,19 +22,9 @@ import javax.validation.ValidatorFactory;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Cacheable(false)
 @NamedQueries({
-    @NamedQuery(name = "WebEntity.countProduct", 
-            query = "SELECT NEW com.web.bean.WebState("
-                    + "(SELECT COUNT(P) FROM  WebProduct AS p) ,"
-                    + "(SELECT COUNT(ct) FROM  WebCategory AS ct),"
-                    + "(SELECT COUNT(cl) FROM  WebClient AS cl),"
-                    + "(SELECT COUNT(fr) FROM  WebFournisseur AS fr),"
-                    + "(SELECT COUNT(ft) FROM  WebFacture AS ft WHERE ft.type=com.web.entity.WebType.FACTURE AND CURRENT_DATE = CURRENT_DATE ),"
-                    + "(SELECT COUNT(ft) FROM  WebFacture AS ft WHERE ft.type=com.web.entity.WebType.LIVRAISON),"
-                    + "(SELECT COUNT(ft) FROM  WebFacture AS ft WHERE ft.type=com.web.entity.WebType.COMMANDE),"
-                    + "(SELECT COUNT(ft) FROM  WebFacture AS ft WHERE ft.type=com.web.entity.WebType.DEVIS)"
-                    + ") FROM WebProduct AS pr ")
+   
 })
-public abstract class WebEntity implements Serializable, IValidation {
+public abstract class WebEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -75,10 +65,4 @@ public abstract class WebEntity implements Serializable, IValidation {
         }
     }
 
-    @Override
-    public boolean isValid() {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        Validator validator = factory.getValidator();
-        return validator.validate(this).isEmpty();
-    }
 }

@@ -13,8 +13,9 @@ import javax.validation.constraints.*;
 @Entity
 @Table()
 @NamedQueries({
+    @NamedQuery(name = "WebUser.updatePassword",query = "UPDATE WebUser u SET u.password=?1 WHERE u.email=?2"),
     @NamedQuery(name = "WebUser.findByUsernameAndPassword",query = "SELECT u FROM WebUser u WHERE u.username=?1 AND u.password=?2"),
-    @NamedQuery(name = "WebUser.findByEmailAndPassword",query = "SELECT u FROM WebUser u WHERE u.email=?1 AND u.password=?2")
+    @NamedQuery(name = "WebUser.findByEmail",query = "SELECT u FROM WebUser u WHERE u.email=?1")
 })
 public class WebUser extends WebEntity {
 

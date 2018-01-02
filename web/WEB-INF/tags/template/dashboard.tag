@@ -2,14 +2,13 @@
 <%@taglib  tagdir="/WEB-INF/tags/bootstrap/" prefix="b" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@taglib tagdir="/WEB-INF/tags/ui/" prefix="ui" %>
-<%@taglib tagdir="/WEB-INF/tags/language/" prefix="language" %>
 <c:if test="${sessionScope.user eq null}">
     <c:redirect url="logout.html"></c:redirect>
 </c:if>
 <!DOCTYPE html>
 <html>
     <head>
-        <title>${user}</title>
+        <title>Projet BI</title>
         <meta charset="UTF-8">
         <link href="<c:url value="/assets/css/bootstrap.css"/>" rel="stylesheet"/>
         <link href="<c:url value="/assets/css/font.css"/>" rel="stylesheet"/>
@@ -25,7 +24,7 @@
         <script src="<c:url value="/assets/js/toastr.js"/>" ></script>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
-    <body class="${sessionScope.user.role.name() eq 'CLIENT'?'skin-yellow':( sessionScope.user.role.name() eq 'ADMIN')?'skin-blue':'skin-green'}">
+    <body class="${( sessionScope.user.role.name() eq 'ADMIN')?'skin-blue':'skin-green'}">
         <!-- header logo: style can be found in header.less -->
         <header class="main-header">
             <a href="" class="logo">
@@ -40,6 +39,7 @@
                     <span class="icon-bar"></span>
                 </a>
                 <div class="navbar-right">
+                                    
                     <ul class="nav navbar-nav">
                         <!-- User Account: style can be found in dropdown.less -->
                         <li class="dropdown user user-menu">
@@ -49,7 +49,7 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <!-- User image -->
-                                <li class="user-header ${sessionScope.user.role.name() eq 'CLIENT'?'bg-yellow-active':( sessionScope.user.role.name() eq 'ADMIN')?'bg-blue-active':'bg-green-active'}">
+                                <li class="user-header ${( sessionScope.user.role.name() eq 'ADMIN')?'bg-blue-active':'bg-green-active'}">
                                     <p>
                                         ${sessionScope.user.username} 
                                     </p>
@@ -60,7 +60,7 @@
                                         <input type="hidden" name="CHANGEPASSWORD" value="TRUE">
                                         <input type="hidden" name="AJAX" value="TRUE">
                                         <button class="btn btn-default pull-left btn-flat"> <span class="fa fa-key"></span></button>
-                                        <a href="logout.html" class="btn btn-default btn-flat pull-right"><language:language message="logout"/></a>
+                                        <a href="logout.html" class="btn btn-default btn-flat pull-right"> Logout</a>
                                     </form>
                                 </li>
                             </ul>

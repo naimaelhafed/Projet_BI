@@ -14,7 +14,6 @@ public class WebAdminController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.setAttribute("state", new WebEntityManager().findOne("WebEntity.countProduct"));
         request.getRequestDispatcher("/WEB-INF/public/WebAdmin/index.jsp").forward(request, response);
     }
 }

@@ -2,12 +2,8 @@ package com.web.service;
 
 import com.web.WebConfig;
 import com.web.entity.WebEntity;
-import com.web.entity.WebFournisseur;
-import com.web.entity.WebProduct;
-import com.web.entity.WebStock;
 import com.web.exception.WebException;
 import java.io.Serializable;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,37 +14,73 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.OptimisticLockException;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import org.eclipse.persistence.internal.jpa.querydef.ExpressionImpl;
+import org.eclipse.persistence.internal.jpa.querydef.OrderImpl;
 
 public class WebEntityManager<T> implements Serializable {
 
+    
     private final Class clss;
 
-    public T findOne(String name, Object... params) {
-    Query query = getEntityManager().createNamedQuery(name);
-        for (int i = 1; i <= params.length; i++) {
-            query.setParameter(i, params[i - 1]);
+    public void execute(String name, Object... params) {
+        EntityManager em = getEntityManager();
+        EntityTransaction transaction=em.getTransaction();
+        Query query;
+        try {
+            transaction.begin();
+            query = em.createNamedQuery(name);
+            for (int i = 1; i <= params.length; i++) {
+                query.setParameter(i, params[i - 1]);
+            }
+            query.executeUpdate();
+            transaction.commit();
+        } finally {
+            em.close();
         }
-        List<T> list= query.getResultList();
-        if(list.size()>0)
-            return list.get(0);
-        return null;
+    }
+    
+    public T findOne(String name, Object... params) {
+        EntityManager em = getEntityManager();
+        Query query;
+
+        try {
+            query = em.createNamedQuery(name);
+            for (int i = 1; i <= params.length; i++) {
+                query.setParameter(i, params[i - 1]);
+            }
+            List<T> list = query.getResultList();
+            if (list.size() > 0) {
+                return list.get(0);
+            }
+            return null;
+        } finally {
+            em.close();
+        }
+
     }
 
     public List<T> findAll(String name, Object... params) {
-        Query query = getEntityManager().createNamedQuery(name);
-        for (int i = 1; i <= params.length; i++) {
-            query.setParameter(i, params[i - 1]);
+        EntityManager em = getEntityManager();
+        Query query;
+        try {
+            query = em.createNamedQuery(name);
+            for (int i = 1; i <= params.length; i++) {
+                query.setParameter(i, params[i - 1]);
+            }
+            return query.getResultList();
+        } finally {
+            em.close();
         }
-        return query.getResultList();
+
     }
 
     public WebEntityManager() {
         this(WebEntity.class);
     }
-    
-    
+
     public WebEntityManager(Class clss) {
         Map properties = new HashMap();
         properties.put("javax.persistence.jdbc.driver", WebConfig.getDriver());
@@ -71,13 +103,12 @@ public class WebEntityManager<T> implements Serializable {
         EntityManager em = null;
         try {
             em = getEntityManager();
-            EntityTransaction transaction=em.getTransaction();
+            EntityTransaction transaction = em.getTransaction();
             transaction.begin();
             em.persist(entity);
             transaction.commit();
-            
-        }catch (Error | Exception e){
-            e.printStackTrace();
+
+        } catch (Error | Exception e) {
         } finally {
             if (em != null) {
                 em.close();
@@ -89,13 +120,11 @@ public class WebEntityManager<T> implements Serializable {
         EntityManager em = null;
         try {
             em = getEntityManager();
-            EntityTransaction transaction=em.getTransaction();
+            EntityTransaction transaction = em.getTransaction();
             transaction.begin();
             em.merge(entity);
             transaction.commit();
-        }catch (OptimisticLockException ex){
-            ex.printStackTrace();
-            //throw new WebException(ex.getMessage());
+        } catch (OptimisticLockException ex) {
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
@@ -116,7 +145,7 @@ public class WebEntityManager<T> implements Serializable {
         EntityManager em = null;
         try {
             em = getEntityManager();
-            EntityTransaction transaction=em.getTransaction();
+            EntityTransaction transaction = em.getTransaction();
             transaction.begin();
             T entity;
             try {
@@ -144,13 +173,16 @@ public class WebEntityManager<T> implements Serializable {
     private List<T> findEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-
-            cq.select(cq.from(clss));
+            CriteriaBuilder cb=em.getCriteriaBuilder();
+            CriteriaQuery cq = cb.createQuery();
+            Root c = cq.from(clss);
+            cq.select(c);
+            cq.orderBy(cb.desc(c.get("version")));
             Query q = em.createQuery(cq);
             if (!all) {
                 q.setMaxResults(maxResults);
                 q.setFirstResult(firstResult);
+                
             }
             return q.getResultList();
         } finally {
@@ -178,26 +210,5 @@ public class WebEntityManager<T> implements Serializable {
         } finally {
             em.close();
         }
-    }
-    
-    public static void main(String[] args) {
-        
-        WebConfig.setDriver("org.postgresql.Driver");
-        WebConfig.setPassword("ADMIN");
-        WebConfig.setUsername("postgres");
-        WebConfig.setUrl("jdbc:postgresql://127.0.0.1:5432/db");
-        
-        WebEntityManager manager=new WebEntityManager();
-        WebEntityManager<WebProduct> pm=new WebEntityManager<>(WebProduct.class);
-        WebEntityManager<WebFournisseur> fm=new WebEntityManager<>(WebFournisseur.class);
-        WebFournisseur fournisseur=fm.find(23466L);
-        WebFournisseur fournisseur2=fm.find(23514L);
-        WebProduct p=pm.find(4954L);
-        WebStock stock=new WebStock().setDate(new Date()).setPrix(10).setFournisseur(fournisseur).setProduct(p).setQuantite(10).setRemarque("re");
-        manager.create(stock);
-        p=pm.find(4954L);
-        WebStock stock2=new WebStock().setDate(new Date()).setPrix(10).setFournisseur(fournisseur2).setProduct(p).setQuantite(10).setRemarque("re");
-    
-    manager.create(stock2);
     }
 }
