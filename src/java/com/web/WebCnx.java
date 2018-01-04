@@ -27,19 +27,19 @@ public ResultSet afficher(String req){
      try { 
          
           //Connexion oracle.jdbc.driver.OracleDriver
-          /*Class.forName("oracle.jdbc.driver.OracleDriver");
+          Class.forName("oracle.jdbc.driver.OracleDriver");
             System.out.println("1");
             Connection con = DriverManager.getConnection(
-                    "jdbc:oracle:thin:@localhost:1521:orcl12c", "system", "oracle");*/
+                    "jdbc:oracle:thin:@localhost:1521:orcl12c", "system", "oracle");
          
          
          
          //Connexion com.mysql.jdbc.Driver
-              Class.forName("com.mysql.jdbc.Driver");
-            Connection con;
-       
-            con = DriverManager.getConnection(
-                    "jdbc:mysql://127.0.0.1:3306/projet_bi", "root", "");
+//              Class.forName("com.mysql.jdbc.Driver");
+//            Connection con;
+//       
+//            con = DriverManager.getConnection(
+//                    "jdbc:mysql://127.0.0.1:3306/projet_bi", "root", "");
             Statement stmt = con.createStatement();
              rs = stmt.executeQuery(req);
            
